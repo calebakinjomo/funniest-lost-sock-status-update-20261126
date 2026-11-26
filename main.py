@@ -18,12 +18,14 @@ MAX_CHARS = 120
 
 def validate(text: str) -> str:
     """Gate the line exactly the way the sealed scorer does: UTF-8 text,
-    1 to 120 characters, not only whitespace."""
+    1 to 120 characters, a single line, not only whitespace."""
     if not isinstance(text, str):
         raise TypeError("entry must be a string")
     text.encode("utf-8")  # raises if not valid UTF-8-encodable text
     if not text.strip():
         raise ValueError("entry must not be only whitespace")
+    if "\n" in text or "\r" in text:
+        raise ValueError("entry must be a single line")
     if len(text) > MAX_CHARS:
         raise ValueError(f"entry is {len(text)} chars, over the {MAX_CHARS} limit")
     return text
